@@ -1,0 +1,136 @@
+{
+    "id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+    "customer_number": "+1234567890",
+    "email": "",
+    "order_number": "ORD-2024-0001",
+    "customer_name": "John Doe",
+    "due_date": "2024-06-01T12:00:00Z",
+    "status": "pending",
+    "created_by_id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+    "created_at": "2024-05-01T10:00:00Z",
+    "updated_at": "2024-05-01T10:00:00Z",
+    "notes": "Please deliver between 9 AM and 5 PM.",
+    "payment_status": "unpaid",
+    "total_amount": 15000,
+    "paid_amount": 0,
+    "balance_due": 15000,
+    "items": [
+        {
+            "id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+            "name": "banner",
+            "desciption": "төрсөн өдрийн мэндчилгээний баннер",
+            "unit_price": 10000,
+            "quantity": 1,
+            "size": "1.5m x 1.5m",
+            "image": [
+                {
+                    "id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+                    "url": "https://example.com/banner.jpg"
+                }
+            ],
+            "line_total": 10000
+        },
+        {
+            "id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+            "name": "picture",
+            "desciption": "A4 хэмжээтэй зураг",
+            "unit_price": 5000,
+            "quantity": 1,
+            "size": "A4",
+            "files": [
+                {
+                    "id": "urn:uuid:3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+                    "url": "https://example.com/cake.jpg"
+                }
+            ],
+            "line_total": 5000
+        }
+    ]
+}
+
+[
+    {
+        "id": "89f0ed24-a447-47f9-83ca-5ccb319d2b35",
+        "order_id": "3e1f8c9e-4b2a-4d5a-9f3b-2c1e5f6d7a8b",
+        "amount": 5000,
+        "type": "PAYMENT",
+        "method": "BANK_TRANSFER",
+        "paid_at": "2026-09-08T04:00:00Z",
+        "created_by_id": "70bfcd76-c777-4e7b-bcb8-58e2cd94d3bc",
+        "created_at": "2026-09-08T04:03:00Z",
+        "note": "Баннер болон A4 зургийн захиалгын урьдчилгаа"
+    }
+]
+
+[
+    {
+        "code": "MAT-001",
+        "name": "A4 оффисын цаас — 80 gsm",
+        "baseUnit": "SHEET",
+        "openingStock": "1000.000",
+        "minStock": "200.000"
+    },
+    {
+        "code": "MAT-002",
+        "name": "A3 бүрэлттэй цаас — 300 gsm",
+        "baseUnit": "SHEET",
+        "openingStock": "100.000",
+        "minStock": "20.000"
+    },
+    {
+        "code": "MAT-003",
+        "name": "A4 гялгар фото цаас — 230 gsm",
+        "baseUnit": "SHEET",
+        "openingStock": "200.000",
+        "minStock": "50.000"
+    },
+    {
+        "code": "MAT-004",
+        "name": "Баннерын материал — 1.52 м, 440 gsm",
+        "baseUnit": "METER",
+        "openingStock": "50.000",
+        "minStock": "10.000"
+    },
+    {
+        "code": "MAT-005",
+        "name": "Цагаан наалттай хуулга — 1.27 м",
+        "baseUnit": "METER",
+        "openingStock": "30.000",
+        "minStock": "5.000"
+    },
+    {
+        "code": "MAT-006",
+        "name": "Гялгар хүйтэн ламинацын плёнк — 1.27 м",
+        "baseUnit": "METER",
+        "openingStock": "25.000",
+        "minStock": "5.000"
+    },
+    {
+        "code": "MAT-007",
+        "name": "PVC хавтан — 1220 × 2440 × 3 мм",
+        "baseUnit": "SHEET",
+        "openingStock": "10.000",
+        "minStock": "2.000"
+    },
+    {
+        "code": "MAT-008",
+        "name": "Хэвлэх зориулалтын цагаан аяга — 330 мл",
+        "baseUnit": "PIECE",
+        "openingStock": "50.000",
+        "minStock": "10.000"
+    },
+    {
+        "code": "MAT-009",
+        "name": "Eco-solvent бэх — Cyan",
+        "baseUnit": "MILLILITER",
+        "openingStock": "1000.000",
+        "minStock": "200.000"
+    },
+    {
+        "code": "MAT-010",
+        "name": "DTF цавууны цагаан нунтаг",
+        "baseUnit": "GRAM",
+        "openingStock": "1000.000",
+        "minStock": "200.000"
+    }
+]
