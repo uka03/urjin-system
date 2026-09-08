@@ -36,9 +36,46 @@ model RefreshToken {
 
 enum Role {
   ADMIN
-  MANAGER
-  SALES
-  WAREHOUSE
-  FINANCE
-  PRODUCTION
+  STAFF
+}
+
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  RESTORE
+  LOGIN
+  LOGOUT
+  EXPORT
+}
+
+model AuditEvent {
+  id          String      @id @default(uuid())
+  
+  // Хэн хийсэн (User эсвэл System)
+  userId      String?     @map("user_id")
+  userEmail   String?     @map("user_email")
+  ipAddress   String?     @map("ip_address")
+  userAgent   String?     @map("user_agent")
+
+  // Ямар үйлдэл хийсэн
+  action      AuditAction
+  
+  // Ямар объект/Resource дээр хийсэн
+  entity      String      // Жишээ нь: 'Invoice', 'User', 'Payment'
+  entityId    String?     @map("entity_id") // Хамаарах объектын ID
+
+  // Өөрчлөлтийн дэлгэрэнгүй (JSON)
+  oldValues   Json?       @map("old_values") // Өөрчлөгдөхөөс өмнөх өгөгдөл
+  newValues   Json?       @map("new_values") // Өөрчлөгдсөний дараах өгөгдөл
+  metadata    Json?       // Нэмэлт мэдээлэл (URL, Query params, Request ID г.м)
+
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_events")
 }
