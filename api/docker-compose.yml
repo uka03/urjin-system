@@ -1,0 +1,25 @@
+services:
+  # 1. PostgreSQL датабэйс сервис
+  postgres:
+    image: postgres:15-alpine
+    container_name: urjin_db
+    restart: always
+    environment:
+      POSTGRES_USER: uka
+      POSTGRES_PASSWORD: mongol0318
+      POSTGRES_DB: urjin-system
+    ports:
+      - '5433:5432'
+
+  # 2. pgAdmin 4 сервис
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_ui
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
