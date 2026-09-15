@@ -13,7 +13,7 @@ import {
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import type { Response, Request } from 'express';
+import type { Response, Request, CookieOptions } from 'express';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { CurrentUser } from 'common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from './types/authenticated-user.type';
@@ -75,5 +75,24 @@ export class AuthController {
     );
 
     return result.data;
+  }
+
+  @Post('logout')
+  async logout(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const refreshToken = request.cookies.refresh_token;
+    this.authService.logout(refreshToken);
+    const cookieOptions: CookieOptions = {
+      ...this.getRefreshCookieOptions(),
+    };
+
+    // Устгах cookie-д хадгалах хугацааг дахин тохируулахгүй.
+    delete cookieOptions.maxAge;
+    delete cookieOptions.expires;
+
+    // 3. Browser дээрх refresh cookie-г устгана.
+    response.clearCookie('refresh_token', cookieOptions);
   }
 }

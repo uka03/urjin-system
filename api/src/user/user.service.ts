@@ -11,6 +11,7 @@ export class UserService {
     return this.prisma.user.findUnique({
       where: {
         email: email.toLowerCase(),
+        isActive: true,
       },
       select: {
         id: true,

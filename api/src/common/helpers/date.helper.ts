@@ -8,7 +8,7 @@ export class DateHelper {
   private static readonly DEFAULT_TIMEZONE = 'Asia/Ulaanbaatar';
 
   static nowUTC(): string {
-    return dayjs().utc().toISOString();
+    return dayjs().tz(this.DEFAULT_TIMEZONE).utc().toISOString();
   }
 
   static formatToLocal(date: string, format: string = 'YYYY-MM-DD'): string {

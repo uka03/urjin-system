@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ref } from 'process';
 import { JwtPayload, RefreshTokenPayload } from './types/jwt-payload.type';
+import { DateHelper } from 'common/helpers/date.helper';
 
 @Injectable()
 export class AuthService {
@@ -199,7 +200,7 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token has expired');
     }
 
-    const isTokenValid = await bcrypt.compare(refreshToken, session.tokenHash);
+    const isTokenValid = bcrypt.compare(refreshToken, session.tokenHash ?? '');
 
     if (!isTokenValid) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -241,6 +242,23 @@ export class AuthService {
         email: user.email,
       },
     };
+  }
+
+  async logout(refreshToken: string) {
+    let payload: RefreshTokenPayload;
+    try {
+      payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: this.configService.getOrThrow('JWT_REFRESH_SECRET'),
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    await this.prisma.refreshToken.update({
+      where: { id: payload.sid },
+      data: {
+        revokedAt: DateHelper.nowUTC(),
+      },
+    });
   }
 
   findOne(id: number) {
