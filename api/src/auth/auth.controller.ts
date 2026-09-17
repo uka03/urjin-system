@@ -17,6 +17,7 @@ import type { Response, Request, CookieOptions } from 'express';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { CurrentUser } from 'common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from './types/authenticated-user.type';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -28,6 +29,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @UseGuards(ThrottlerGuard)
   async login(
     @Body() dto: LoginAuthDto,
     @Res({ passthrough: true }) response: Response,

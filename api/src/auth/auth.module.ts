@@ -6,6 +6,7 @@ import { UserModule } from 'user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   controllers: [AuthController],
@@ -16,6 +17,17 @@ import { AccessTokenStrategy } from './strategies/access-token.strategy';
     JwtModule.register({}),
     PassportModule.register({
       defaultStrategy: 'jwt',
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60_000,
+          limit: 5,
+          blockDuration: 60_000,
+        },
+      ],
+      errorMessage:
+        'Хэт олон оролдолго хийсэн байна. 60сек хүлээгээд дахин оролдоно уу',
     }),
   ],
 })
