@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { ChangeRoleDto, CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesGuard } from 'auth/guards/role.guard';
 import { Role } from '@prisma/client';
@@ -42,9 +42,9 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch(':id/change-role')
+  update(@Param('id') id: string, @Body() dto: ChangeRoleDto) {
+    return this.userService.update(id, dto);
   }
 
   @Delete(':id')
