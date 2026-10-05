@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { PaginationDto } from 'common/dto/pagination.dto';
+import { MetaData } from 'common/types/meta.type';
 
 @Injectable()
 export class UserService {
@@ -28,8 +30,46 @@ export class UserService {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(pagination: PaginationDto) {
+    const page = pagination.page;
+    const limit = pagination.limit;
+    const query = pagination.q;
+    const skip = page - 1;
+    const condition = {
+      name: {
+        contains: query,
+      },
+    };
+
+    const [users, totalCount] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where: condition,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isActive: true,
+          createdAt: true,
+        },
+        orderBy: {
+          name: 'asc',
+        },
+        skip,
+      }),
+      this.prisma.user.count({ where: condition }),
+    ]);
+
+    const totalPage = Math.ceil(totalCount / limit);
+
+    const meta: MetaData = {
+      page: page,
+      totalItem: totalCount,
+      totalPage: totalPage,
+      limit: limit,
+    };
+    return { users, meta };
   }
 
   findOne(id: number) {
