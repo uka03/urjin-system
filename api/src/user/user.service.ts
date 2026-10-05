@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { ChangeRoleDto, CreateUserDto } from './dto/create-user.dto';
+import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ChangeActiveDto,
+  ChangeRoleDto,
+  CreateUserDto,
+} from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { PaginationDto } from 'common/dto/pagination.dto';
 import { MetaData } from 'common/types/meta.type';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -76,8 +81,9 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  async update(id: string, dto: ChangeRoleDto) {
-    console.log(dto);
+  async changeRole(id: string, dto: ChangeRoleDto) {
+    if (dto.role != Role.ADMIN) await this.lastAdminCheck();
+
     const user = await this.prisma.user.update({
       where: {
         id: id,
@@ -93,6 +99,43 @@ export class UserService {
       data: dto,
     });
     return user;
+  }
+
+  async changeActive(id: string, dto: ChangeActiveDto) {
+    if (dto.isActive == false) {
+      await this.lastAdminCheck();
+    }
+    const user = await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+      },
+      data: dto,
+    });
+    return user;
+  }
+
+  async lastAdminCheck() {
+    const adminCount = await this.prisma.user.count({
+      where: {
+        isActive: true,
+        role: Role.ADMIN,
+      },
+    });
+    if (adminCount <= 1) {
+      throw new ConflictException({
+        code: 'LAST_ACTIVE_ADMIN',
+        message:
+          'Сүүлийн идэвхтэй ADMIN-ийн эрхийг бууруулах эсвэл идэвхгүй болгох боломжгүй.',
+      });
+    }
   }
 
   remove(id: number) {
